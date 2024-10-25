@@ -1,0 +1,15 @@
+Stappenplan:
+
+1. Pak de API van het internet
+
+2. Zoek uit hoe de API werkt
+
+3. Maak een nieuwe map met een html bestand gelinkt met een JS bestand
+
+4. Sla de data op met een variable en fetch de Data via de link van de API in JS
+
+5. Maak een .then aan en een function en check of je de data binnen krijgt
+
+6. return de data zodat je de echte data eruit haalt
+
+7. Maak nog een return zodat de data goed binnen komt en bruikbaar is

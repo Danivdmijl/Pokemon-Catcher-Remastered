@@ -1,0 +1,543 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html{
+    font-size: 62.5%;
+}
+
+:root {
+    --red: #ff1c1c;
+    --orange: orange;
+    --green: rgb(93, 252, 93);
+    --pink: #FF69B4;
+    --blue: #1E90FF;
+    --white: #ffffff;
+    --black: #000000;
+    --light-gray: #f3f3f3;
+    --gray: #cccccc;
+    --dark-gray: #333333;
+}
+
+body {
+    background: var(--gray);
+    color: var(--black);
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    min-height: 89vh;
+    padding: 0;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Text Fade-In Animation */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+
+
+#js--pokemon-text {
+    animation: fadeIn 0.7s ease-out;
+    max-width: 90%; /* Adjust based on the card width */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    font-size: 25px; /* Adjust as needed for readability */
+}
+
+/* Shiny Pokémon Effect for main display and Pokedex */
+.shiny-effect {
+    border: 3px solid gold;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6), 0 0 10px rgba(255, 215, 0, 0.5);
+    animation: sparkle 1.5s infinite;
+}
+
+@keyframes sparkle {
+    0% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+    100% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+}
+
+.pokedex-image {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--black);
+}
+
+/* Distinct border for shiny Pokémon in the Pokedex */
+.pokedex-image.shiny-effect {
+    border: 3px solid gold; /* Ensures border is visible in Pokedex */
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.6); /* Adds a glow effect */
+}
+
+.cards{
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.card {
+    width: 50rem;
+    height: 55rem;
+    background: var(--white);
+    border: 0.5rem solid var(--black);
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 10%;
+    background: var(--black);
+    transform: translateY(-50%);
+}
+
+.card h2, .card p {
+    z-index: 1;
+}
+
+#js--pokemon-image {
+    width: 20rem;
+    height: 20rem;
+    z-index: 3;
+    border: 0.5rem solid var(--black);
+    border-radius: 50%;
+    background-color: var(--white);
+    padding: 0.5rem;
+}
+
+
+#js--catch-button, #js--run-button, #js--pokedex-button {
+    width: 15rem;
+    height: 5rem;
+    background: var(--red);
+    color: var(--white);
+    font-weight: bold;
+    font-size: 1.6rem;
+    border-radius: 10px;
+    border: 2px solid var(--black);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    box-shadow: 0px 4px 0px var(--dark-gray);
+    cursor: pointer;
+}
+
+#js--catch-button:hover, #js--run-button:hover, #js--pokedex-button:hover {
+    background: #e60000;
+    transform: scale(1.05);
+}
+
+#js--catch-button:active, #js--run-button:active, #js--pokedex-button:active {
+    background: #cc0000;
+    transform: scale(0.95);
+    box-shadow: none;
+}
+
+
+/* Pokémon Appearance Animation */
+@keyframes popIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    60% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Pokeball Shake Animation */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-5px); }
+    40% { transform: translateX(5px); }
+    60% { transform: translateX(-5px); }
+    80% { transform: translateX(5px); }
+    100% { transform: translateX(0); }
+}
+
+#js--catch-button:active {
+    animation: shake 0.5s ease;
+}
+
+
+#js--pokemon-image {
+    width: 20rem;
+    height: 20rem;
+    animation: popIn 0.5s ease-out;
+}
+
+#js--reset-pokedex-button {
+    margin-top: 1rem;
+    background-color: var(--dark-gray);
+    color: var(--white);
+    font-size: 1.4rem;
+    padding: 0.8rem 1.2rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#js--reset-pokedex-button:hover {
+    background-color: #444;
+}
+
+#js--reset-pokedex-button:active {
+    background-color: #333;
+}
+
+
+/* Pokedex Modal Styling */
+.pokedex-modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.pokedex-content {
+    background-color: var(--white);
+    margin: 5% auto;
+    padding: 20px;
+    border: 0.5rem solid var(--black);
+    width: 80%;
+    max-width: 600px;
+    text-align: center;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Pokedex Header */
+.pokedex-content h2 {
+    background-color: var(--red);
+    color: var(--white);
+    padding: 1rem;
+    margin: -20px -20px 1rem -20px;
+    border-bottom: 0.5rem solid var(--black);
+    font-size: 2.5rem;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+/* Close button styling */
+#js--pokedex-close {
+    color: var(--black);
+    float: right;
+    font-size: 2.5rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#js--pokedex-close:hover {
+    color: var(--red);
+}
+
+/* Pokedex List Styling */
+#js--pokedex-list {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+#js--pokedex-list li {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: var(--light-gray);
+    border: 1px solid var(--gray);
+    border-radius: 5px;
+}
+
+
+/* Header Styling */
+.game-header {
+    width: 100%;
+    background-color: var(--dark-gray);
+    padding: 1rem;
+    text-align: center;
+    color: var(--white);
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-bottom: 0.5rem solid var(--black);
+    margin-bottom: 2rem;
+}
+
+.pokemon-info-info {
+    /* background: orange; */
+    display: flex;
+    gap: 1rem;
+    width: 83%;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.pokemon-info-info > div {
+    text-align: center;
+}
+
+.pokemon-info-info > article {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.pokemon-info {
+    position: absolute;
+    top: 43rem; /* Position as specified */
+    left: 25rem; /* Position as specified */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background: var(--white);
+    height: 30rem;
+    width: 35rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    border-radius: 100px;
+    border: 0.5rem solid var(--black);
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+#js--hp-bar {
+    width: 250px;
+    height: 30px;
+    background-color: var(--gray);
+    border: 2px solid var(--black);
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+#js--hp-fill {
+    height: 100%;
+    background-color: var(--green);
+    width: 100%;
+    transform-origin: left; /* Anchor on the right side */
+    transform: scaleX(1); /* Start fully filled */
+    transition: transform 0.3s ease; /* Smooth decrease */
+}
+
+/* Position the HP text on top of the HP bar */
+#js--hp-text {
+    position: absolute;
+    top: -25px; /* Position above the HP bar */
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.4rem;
+    color: var(--black);
+    font-weight: bold;
+    text-align: center;
+}
+
+
+/* 2x2 grid for attack buttons */
+#js--attack-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    width: 250px; /* Adjust to match the HP bar width */
+}
+
+.attack-button {
+    padding: 0.5rem;
+    font-size: 1.85rem;
+    border-radius: 5px;
+    background-color: var(--dark-gray);
+    color: var(--white);
+    cursor: pointer;
+    border: 1px solid var(--black);
+    text-align: center;
+}
+
+.attack-button:hover {
+    background-color: var(--red);
+}
+
+.pokemon-info-gender{
+    font-size: 25px;
+    padding-bottom: 1rem;
+}
+
+.pokemon-info-h3{
+    font-size: 30px;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+/* Fainting Effect */
+@keyframes faint {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(50px); opacity: 0; }
+}
+
+.faint-effect {
+    animation: faint 1s ease-out forwards !important;
+}
+
+
+
+@keyframes flameHit {
+    0% { transform: translate(0, 0) scale(1); background-color: rgb(255, 69, 0); filter: brightness(1); }
+    10% { transform: translate(-2px, -2px) scale(1.05); }
+    20% { transform: translate(2px, 2px) scale(1.1); background-color: rgb(255, 69, 0); filter: brightness(1.3) contrast(1.2); }
+    30% { transform: translate(-2px, 2px) scale(1.1); }
+    40% { transform: translate(2px, -2px) scale(1.1); }
+    60% { transform: translate(-1px, 1px) scale(1.1); }
+    80% { transform: translate(1px, -1px) scale(1.1); }
+    100% { transform: translate(0, 0) scale(1); background-color: rgb(255, 69, 0); filter: brightness(1); }
+}
+
+/* Hyper Beam Effect */
+@keyframes hyperBeam {
+    0% { transform: scale(1); filter: brightness(1) contrast(1); background-color: rgb(255, 255, 255); }
+    50% { transform: scale(1.2); filter: brightness(1.7) contrast(2); background-color: rgb(255, 255, 255); }
+    100% { transform: scale(1); filter: brightness(1) contrast(1); background-color: rgb(255, 255, 255); }
+}
+
+/* Quick Attack Effect */
+@keyframes quickAttack {
+    0% { transform: translateX(0); background-color: rgb(173, 216, 230); }
+    25% { transform: translateX(-15px); background-color: rgb(173, 216, 230); }
+    50% { transform: translateX(15px); background-color: rgb(173, 216, 230); }
+    75% { transform: translateX(-10px); background-color: rgb(173, 216, 230); }
+    100% { transform: translateX(0); background-color: rgb(173, 216, 230); }
+}
+
+
+/* Thunderbolt Effect */
+@keyframes thunderBolt {
+    0% { filter: brightness(1); background-color: rgb(255, 255, 0); }
+    25% { filter: brightness(1.5); background-color: rgb(255, 255, 0); }
+    50% { filter: brightness(1); background-color: rgb(255, 255, 0); }
+    75% { filter: brightness(1.5); background-color: rgb(255, 255, 0); }
+    100% { filter: brightness(1); background-color: rgb(255, 255, 0); }
+}
+
+@keyframes caughtEffect {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+        box-shadow: 0 0 0 rgba(255, 255, 0, 0); /* No glow */
+    }
+    25% {
+        transform: scale(1.1);
+        opacity: 0.8;
+        box-shadow: 0 0 15px rgba(255, 255, 0, 0.6); /* Glow starts */
+    }
+    50% {
+        transform: scale(1);
+        opacity: 1;
+        box-shadow: 0 0 20px rgba(255, 255, 0, 1); /* Strong glow */
+    }
+    75% {
+        transform: scale(1.1);
+        opacity: 0.8;
+        box-shadow: 0 0 15px rgba(255, 255, 0, 0.6); /* Glow starts again */
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+        box-shadow: 0 0 0 rgba(255, 255, 0, 0); /* No glow */
+    }
+}
+
+#js--stars-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Allow clicks to pass through */
+    z-index: 1; /* Stars should be below the Pokémon image */
+}
+
+#js--pokemon-container {
+    position: relative; /* Position context for stars */
+    z-index: 1; /* Make sure Pokémon image and stars are on top */
+}
+
+.star {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: yellow;
+    border-radius: 50%;
+    opacity: 0; /* Start hidden */
+    animation: fadeStar 2s forwards; /* Fade in animation */
+}
+
+
+@keyframes fadeStar {
+    0% {
+        transform: translate(0, 0);
+        opacity: 0; /* Fully invisible */
+    }
+    20% {
+        opacity: 0.4; /* Slightly visible */
+    }
+    50% {
+        opacity: 1; /* Fully visible */
+    }
+    80% {
+        opacity: 0.4; /* Slightly visible again */
+    }
+    100% {
+        opacity: 0; /* Fully invisible */
+    }
+}
+
+
+.gray-filter {
+    position: absolute; /* Positioning for the whole circle */
+    top: 0;
+    left: 0;
+    width: 100%; /* Cover the entire container */
+    height: 100%;
+    filter: grayscale(100%); /* Apply gray filter */
+    transition: filter 0.5s; /* Smooth transition for gray filter */
+    z-index: 1; /* Ensure it’s below the Pokémon image but above the stars */
+}

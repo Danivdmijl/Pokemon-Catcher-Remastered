@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <title>Pokemon Generator</title>
+</head>
+
+<body>
+    <header class="game-header">
+        <h1>Pokémon Catch Game</h1>
+    </header>
+
+    <!-- Pokemon Info on the left side of the page -->
+    <div class="pokemon-info">
+        <div class="pokemon-info-info">
+            <div>
+                <span class="pokemon-info-h3" id="js--pokemon-name">Name</span>
+            </div>
+            <article>
+                <span class="pokemon-info-gender" id="js--pokemon-gender"></span>
+                <span id="js--pokemon-level">Lv. 1</span>
+            </article>
+        </div>
+        <div id="js--hp-bar">
+            <span id="js--hp-text"></span>
+            <div id="js--hp-fill"></div>
+        </div>
+        <div id="js--attack-buttons">
+            <button class="attack-button" data-damage="10">Quick Attack</button>
+            <button class="attack-button" data-damage="20">Thunderbolt</button>
+            <button class="attack-button" data-damage="30">Flamethrower</button>
+            <button class="attack-button" data-damage="40">Hyper Beam</button>
+        </div>
+    </div>
+
+    <!-- Cards section where the Pokémon will appear -->
+    <ul class="cards">
+        <li class="card">
+            <h2 id="js--pokemon-text"></h2>
+            <p class="catchcounter" id="js--caught-counter">Pokemon Caught:</p>
+            <div id="js--pokemon-container">
+                <img id="js--pokemon-image" src="" alt="Here is a random Pokemon!">
+                <div id="js--stars-container"></div> <!-- Container for stars -->
+            </div>
+            <button class="button" id="js--catch-button">Catch</button>
+            <button class="button" id="js--run-button">Run</button>
+            <button class="button" id="js--pokedex-button">Open Pokedex</button>
+            <button id="js--reset-pokedex-button">Reset Pokedex</button>
+        </li>
+        
+    </ul>
+
+    <div id="js--pokedex-modal" class="pokedex-modal">
+        <div class="pokedex-content">
+            <span id="js--pokedex-close">&times;</span>
+            <h2>Pokedex</h2>
+            <ul id="js--pokedex-list"></ul>
+        </div>
+    </div>
+</body>
+
+</html>
