@@ -1,4 +1,4 @@
-let shinyChance = 0.5; // Set shiny chance to 50%
+let shinyChance = 0.01; // Set shiny chance to 1%
 let maxPokemonHP = 100;
 let pokemonHP = maxPokemonHP;
 
@@ -33,56 +33,106 @@ const caughtCountertext = document.getElementById("js--caught-counter");
 let caughtCounter = 0;
 caughtCountertext.innerText = "Pokemon Caught: " + caughtCounter;
 
+function idkwtfditeigword() {
+    randomNumber = Math.floor(Math.random() * 897 + 1);
+    fetch("https://pokeapi.co/api/v2/pokemon/" + randomNumber)
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(realData) {
+            const isShiny = Math.random() < shinyChance;
+
+            // Set Pokémon image based on whether it's shiny
+            if (isShiny) {
+                pokemonImage.src = realData.sprites.front_shiny;
+                pokemonImage.classList.add("shiny-effect"); // Add shiny effect
+                pokemonText.innerText = "A shiny " + realData.name + " has appeared!";
+            } else {
+                pokemonImage.src = realData.sprites.front_default;
+                pokemonImage.classList.remove("shiny-effect");
+                pokemonText.innerText = "A wild " + realData.name + " has appeared!";
+            }
+
+            pokemonName = realData.name;
+            setTimeout(nieuwepokemon, 750);
+        });
+}
+
+// Check if Pokémon is shiny during generation
+function idkwtfditeigword() {
+    randomNumber = Math.floor(Math.random() * 897 + 1);
+    fetch("https://pokeapi.co/api/v2/pokemon/" + randomNumber)
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(realData) {
+            const isShiny = Math.random() < shinyChance;
+
+            // Set Pokémon image based on whether it's shiny
+            if (isShiny) {
+                pokemonImage.src = realData.sprites.front_shiny;
+                pokemonImage.classList.add("shiny-effect"); // Add shiny effect
+                pokemonText.innerText = "A shiny " + realData.name + " has appeared!";
+            } else {
+                pokemonImage.src = realData.sprites.front_default;
+                pokemonImage.classList.remove("shiny-effect");
+                pokemonText.innerText = "A wild " + realData.name + " has appeared!";
+            }
+
+            pokemonName = realData.name;
+            setTimeout(nieuwepokemon, 750);
+        });
+}
+
+// Counters for Pokedex info
+let totalBattled = 0;
+let shinyFoundCount = 0;
+let shinyCaughtCount = 0;
+
+// Existing code to catch a Pokémon
 catchButton.onclick = function() {
-    // Disable the button to prevent spam clicks
     catchButton.disabled = true;
-    runButton.disabled = true; // Optionally disable the Run button too
+    runButton.disabled = true;
 
     if (!fainting) {
-        const catchRate = calculateCatchRate(); // Calculate the catch rate
-        const isCaught = Math.random() < catchRate; // Determine if the Pokémon is caught
+        const catchRate = calculateCatchRate();
+        const isCaught = Math.random() < catchRate;
+        const isShiny = pokemonImage.dataset.isShiny === "true";
+
+        totalBattled++; // Increment battles on every encounter
 
         if (isCaught) {
             pokemonText.innerText = "Pokemon Caught!";
             caughtCounter++;
             caughtCountertext.innerText = "Pokemon Caught: " + caughtCounter;
-            addToPokedex({ id: randomNumber, name: pokemonName, sprites: { front_default: pokemonImage.src } });
 
-            // Apply the catch effect
-            pokemonImage.classList.add("catch-effect");
+            // Increment shiny caught if applicable
+            if (isShiny) shinyCaughtCount++;
 
-            // Remove the effect class after the animation duration
+            // Add to Pokedex and refresh stats
+            addToPokedex(
+                { id: randomNumber, name: pokemonName, sprites: { front_default: pokemonImage.src, front_shiny: pokemonImage.src } },
+                isShiny
+            );
+
+            updatePokedexStats(); // Update the Pokedex stats
+
             setTimeout(() => {
                 pokemonImage.classList.remove("catch-effect");
-            }, 500); // Match this to the duration of your CSS animation
+            }, 500);
         } else {
             pokemonText.innerText = "The Pokémon escaped!";
         }
-        
-        // Load a new Pokémon after a brief delay
+
         setTimeout(() => {
-            loadNewPokemon(); // Load new Pokémon
-            catchButton.disabled = false; // Re-enable the Catch button
-            runButton.disabled = false; // Re-enable the Run button
-        }, 2000); // Delay to allow the catch message to display
+            loadNewPokemon();
+            catchButton.disabled = false;
+            runButton.disabled = false;
+        }, 2000);
     }
 };
 
-function idkwtfditeigword(){
-    randomNumber = Math.floor(Math.random() * 897 + 1);
-            console.log(randomNumber);
-            fetch("https://pokeapi.co/api/v2/pokemon/" + randomNumber)
-            .then(function(response){
-                return response.json();
-            })
-            .then(function(realData){
-                console.log(realData);
-                pokemonImage.src = realData.sprites.front_default;
-                pokemonName = realData.name;
-                pokemonText.innerText = "A wild " + pokemonName + " has appeared";
-                setTimeout(nieuwepokemon, 750);
-            });        
-}
+
 
 const runButton = document.getElementById("js--run-button");
 console.log(runButton);
@@ -127,7 +177,6 @@ let pokedex = JSON.parse(localStorage.getItem('pokedex')) || [];
 
 // Function to add a Pokemon to the Pokedex (only if not already added)
 function addToPokedex(pokemon, isShiny = false) {
-    // Avoid duplicates of the same Pokémon with different shiny statuses
     if (!pokedex.some(p => p.id === pokemon.id && p.isShiny === isShiny)) {
         pokedex.push({ 
             id: pokemon.id, 
@@ -135,9 +184,10 @@ function addToPokedex(pokemon, isShiny = false) {
             image: isShiny ? pokemon.sprites.front_shiny : pokemon.sprites.front_default,
             isShiny: isShiny
         });
-        localStorage.setItem('pokedex', JSON.stringify(pokedex)); // Save to localStorage
+        localStorage.setItem('pokedex', JSON.stringify(pokedex));
     }
 }
+
 
 function updatePokedexUI() {
     pokedexList.innerHTML = '';
@@ -151,11 +201,20 @@ function updatePokedexUI() {
     });
 }
 
+
+function updatePokedexStats() {
+    document.querySelector(".pokedex-info-p:nth-child(1)").innerText = `Caught Pokemon: ${caughtCounter}`;
+    document.querySelector(".pokedex-info-p:nth-child(2)").innerText = `Pokemon Battled: ${totalBattled}`;
+    document.querySelector(".pokedex-info-p:nth-child(3)").innerText = `Shiny's Found: ${shinyFoundCount}`;
+    document.querySelector(".pokedex-info-p:nth-child(4)").innerText = `Shiny's Caught: ${shinyCaughtCount}`;
+}
+
 // Open the Pokedex
 pokedexButton.onclick = function() {
     updatePokedexUI();
+    updatePokedexStats();
     pokedexModal.style.display = "block";
-}
+};
 
 // Close the Pokedex
 pokedexClose.onclick = function() {
@@ -214,17 +273,16 @@ function updateHPBar() {
     const hpFill = document.getElementById("js--hp-fill");
     const hpText = document.getElementById("js--hp-text");
 
-    // Update HP bar scale
-    hpFill.style.transform = `scaleX(${hpPercentage})`; 
+    hpFill.style.transform = `scaleX(${hpPercentage})`;
     hpText.innerText = `HP: ${pokemonHP}/${maxPokemonHP}`;
 
     // Change HP bar color based on percentage
     if (hpPercentage > 0.5) {
-        hpFill.style.backgroundColor = "var(--green)"; // Above 50%
+        hpFill.style.backgroundColor = "var(--green)";
     } else if (hpPercentage > 0.25) {
-        hpFill.style.backgroundColor = "var(--orange)"; // Between 25% and 50%
+        hpFill.style.backgroundColor = "var(--orange)";
     } else {
-        hpFill.style.backgroundColor = "var(--red)"; // Below 25%
+        hpFill.style.backgroundColor = "var(--red)";
     }
 }
 
@@ -237,47 +295,45 @@ function calculateCatchRate() {
 }
 
 function loadNewPokemon() {
-    fainting = false; // Reset fainting flag for the new Pokémon
-
-    // Fetch a new Pokémon and update display
     randomNumber = Math.floor(Math.random() * 897 + 1);
     fetch("https://pokeapi.co/api/v2/pokemon/" + randomNumber)
-        .then(function(response) {
-            return response.json();
-        })
-        .then(function(realData) {
-            // Update Pokémon name
+        .then(response => response.json())
+        .then(realData => {
+            const isShiny = Math.random() < shinyChance; // 50% chance for shiny
+
+            if (isShiny) {
+                shinyFoundCount++; // Count shiny encounters
+            }
+
+            updatePokedexStats(); // Update the stats with new encounter info
+
             pokemonName = realData.name;
+            pokemonText.innerText = isShiny 
+                ? "A shiny " + pokemonName + " has appeared!" 
+                : "A wild " + pokemonName + " has appeared!";
+            pokemonImage.src = isShiny ? realData.sprites.front_shiny : realData.sprites.front_default;
+            pokemonImage.classList.toggle("shiny-effect", isShiny);
+            pokemonImage.dataset.isShiny = isShiny;
+
             document.getElementById("js--pokemon-name").innerText = pokemonName;
 
-            // Update Pokémon image
-            pokemonImage.src = realData.sprites.front_default;
-            pokemonText.innerText = "A wild " + pokemonName + " has appeared!";
-
-            // Update Pokémon gender and style it
             const genderSpan = document.getElementById("js--pokemon-gender");
-            let gender;
-            if (realData.gender_rate === -1) {
-                gender = "⚥";
-            } else {
-                gender = Math.random() < 0.5 ? "♂" : "♀";
-            }
+            let gender = realData.gender_rate === -1 ? "⚥" : (Math.random() < 0.5 ? "♂" : "♀");
             genderSpan.innerText = gender;
-            genderSpan.style.color = gender === "Male" ? "var(--blue)" : "var(--pink)";
+            genderSpan.style.color = gender === "♂" ? "var(--blue)" : "var(--pink)";
 
-            // Update Pokémon level (simulate a random level between 1 and 100)
             const level = Math.floor(Math.random() * 100) + 1;
             document.getElementById("js--pokemon-level").innerText = `Lv. ${level}`;
 
-            // Set max HP based on the Pokémon's actual base HP stat
-            maxPokemonHP = realData.stats[0].base_stat; // This is usually the HP stat in the API
-            pokemonHP = maxPokemonHP; // Set current HP to max HP
+            maxPokemonHP = realData.stats[0].base_stat;
+            pokemonHP = maxPokemonHP;
             updateHPBar();
 
-            // Apply the popIn animation every time a new Pokémon is loaded
             pokemonImage.style.animation = "popIn 0.5s ease-out";
         });
 }
+
+
 
 let fainting = false; // Flag to track if the Pokémon is fainting
 
@@ -296,7 +352,7 @@ document.querySelectorAll(".attack-button").forEach(button => {
         updateHPBar();
 
         // If HP reaches 0, faint the Pokémon and load a new one
-        if (pokemonHP === 0) {
+        if (pokemonHP === 0) {  
             console.log("Pokemon fainted, clearing any active attack animations");
 
             fainting = true; // Set the fainting flag
